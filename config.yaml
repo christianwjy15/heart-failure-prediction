@@ -1,0 +1,9 @@
+data:
+  raw_path: data/raw/heart.csv
+  processed_dir: data/processed
+  target: HeartDisease
+  test_size: 0.2
+  random_state: 42
+
+model:
+  output_path: models/model.pkl
