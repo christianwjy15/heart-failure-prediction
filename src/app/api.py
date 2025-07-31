@@ -71,3 +71,5 @@ def predict(patient_data: HeartDiseaseInput):
     
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"An error occurred during prediction: {e}")
+
+# uvicorn src.app.api:app --reload     
