@@ -6,4 +6,4 @@ data:
   random_state: 42
 
 model:
-  output_path: models/model.pkl
+  output_path: models/final_model.joblib
