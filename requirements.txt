@@ -8,9 +8,10 @@ xgboost
 catboost
 lightgbm
 mlflow
+optuna
+joblib
+pyyaml
 streamlit
 fastapi
 uvicorn
-pyyaml
-optuna
-joblib
+requests

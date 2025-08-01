@@ -64,14 +64,11 @@ st.write(input_df)
 # Prediction Logic
 if st.sidebar.button("Predict"):
 
-    response = requests.post("http://localhost:8000/predict", json=input_dict)
 
-    # {
-    #     "prediction": 0,
-    #     "prediction_label": "Normal",
-    #     "probability_normal": 0.8856996490401661,
-    #     "probability_heart_disease": 0.11430035095983389
-    # }
+    response = requests.post("http://api:8000/predict", json=input_dict)
+
+    # use this code if you don't want use Docker
+    #response = requests.post("http://localhost:8000/predict", json=input_dict)
 
     try:
         prediction = response.json()["prediction"]
@@ -93,15 +90,6 @@ if st.sidebar.button("Predict"):
                 label="Probability of Heart Disease",
                 value=f"{prob_heart_disease:.2%}",
             )
-
-            # Progress bar for visualization
-            # st.progress(prob_heart_disease)
-            
-            # with st.expander("See detailed probabilities"):
-            #     st.write({
-            #         "Probability (Normal)": f"{probability[0]:.4f}",
-            #         "Probability (Heart Disease)": f"{probability[1]:.4f}"
-            #     })
 
     except Exception as e:
         st.error(f"An error occurred during prediction: {e}")
