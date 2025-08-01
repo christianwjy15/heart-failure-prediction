@@ -17,8 +17,15 @@ This project is an end-to-end machine learning application to predict the likeli
   
 ---
 
+## Tech Stack
+- **Modeling & Data Science**: Python, Pandas, Scikit-learn, XGBoost, LightGBM, CatBoost
+- **MLOps & Tools**: MLflow, Optuna, Docker, Docker Compose
+- **API & UI**: FastAPI, Uvicorn, Streamlit, Requests
+
+---
+
 ## Project Structure
-``` 
+``` bash
 .
 ├── .dockerignore                  # Specifies files and directories to ignore when building Docker images.
 ├── .gitignore                     # Defines untracked files and directories to be ignored by Git.
@@ -70,23 +77,91 @@ This project is an end-to-end machine learning application to predict the likeli
 
 ## Getting Started
 ### Prerequisites
+To run this project, ensure you have the following tools installed:
+
+- **Python 3.10+**
+- **Git**
+- **Docker**
+- **Docker Compose**
+
+> **Note:** If you prefer not to use Docker, you can still run the application locally with minor modifications. Detailed instructions are provided in the **Usage** section.
+
+---
+
 ### Installation
+#### Clone the Repository
+```bash
+git clone https://github.com/christianwjy15/heart-failure-prediction.git
+cd heart-failure-prediction
+```
+
+#### Create and Activate a Virtual Environment
+``` bash
+python -m venv .venv
+source .venv/bin/activate  # On Windows: `.venv\Scripts\activate`
+```
+
+#### Install Dependencies
+``` bash
+pip install -r requirements.txt
+```
+
+---
+
 ### Usage
+#### 1. Preprocess Data, Train, and Evaluate Model
+Run the following commands to preprocess the data, train the model, and evaluate its performance:
+
+``` bash
 python -m src.data.data_preprocessing
 python -m src.models.train_model
 python -m src.models.evaluate_model
+
+```
+#### 2. Launch MLflow UI (Optional for Experiment Tracking)
+```bash
 mlflow ui
+```
+Open http://localhost:5000 in your browser to explore experiment runs, parameters, metrics, and artifacts.
 
+#### 3. Run the API and Streamlit App
+##### If Using Docker (Recommended)
+``` bash
 docker-compose up --build
-buka localhost
+```
+This builds and starts both the FastAPI and Streamlit services inside containers.
 
-atau
+#### If Not Using Docker
+If you prefer to run the app without Docker, you’ll need to modify the API endpoint in the Streamlit app.
+Edit the file: ```src/app/streamlit_app.py``` 
+Change this line:
+``` bash
+response = requests.post("http://api:8000/predict", json=input_dict)
+```
 
+To:
+``` bash
+response = requests.post("http://localhost:8000/predict", json=input_dict)
+```
+
+Then, run the services manually:
+Start the FastAPI backend:
+``` bash
 uvicorn src.app.api:app --reload
+```
 
-ubah code streamlit
+Start the Streamlit frontend:
+``` bash
 streamlit run src/app/streamlit_app.py
-buka localhost
+```
+
+#### 4. Access the Applications
+Once the services are running, open your browser to:
+
+Streamlit Dashboard: http://localhost:8501
+
+FastAPI Docs (Swagger UI): http://localhost:8000/docs
+
 
 ---
 ## Data
@@ -122,22 +197,6 @@ Confusion matrices, ROC curves (if applicable, you can link to an image).
 
 Insights gained from the model.
 
----
-## Deployment (If Applicable)
-If you've deployed your model, explain where it's deployed and how to access it.
-
-Platform used (e.g., Heroku, AWS Sagemaker, Google Cloud AI Platform, Streamlit Cloud)
-
-Link to the live application.
-
-Instructions for deploying it yourself.
-
----
-
-## Tech Stack
-- **Modeling & Data Science**: Python, Pandas, Scikit-learn, XGBoost, LightGBM, CatBoost
-- **MLOps & Tools**: MLflow, Optuna, Docker, Docker Compose
-- **API & UI**: FastAPI, Uvicorn, Streamlit, Requests
 
 
 
