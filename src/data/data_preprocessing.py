@@ -47,8 +47,8 @@ def preprocess_data(config):
     test_df = pd.concat([X_test, y_test], axis=1)
 
     # Save to CSV
-    train_df.to_csv(os.path.join(config["data"]["processed_dir"], "train1.csv"), index=False)
-    test_df.to_csv(os.path.join(config["data"]["processed_dir"], "test1.csv"), index=False)
+    train_df.to_csv(os.path.join(config["data"]["processed_dir"], "train.csv"), index=False)
+    test_df.to_csv(os.path.join(config["data"]["processed_dir"], "test.csv"), index=False)
 
 if __name__ == "__main__":
     config = load_config()
