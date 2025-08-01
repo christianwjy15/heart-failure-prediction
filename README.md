@@ -249,9 +249,9 @@ After identifying **CatBoost** as the best model through cross-validation and hy
 <img width="480" height="360" alt="image" src="https://github.com/user-attachments/assets/6f455997-8a60-4e3c-9ebc-73c6938449e9" />
 
 This means:
-- **73** patients without heart disease were correctly classified
+- **72** patients without heart disease were correctly classified
 - **93** patients with heart disease were correctly classified  
-- **9** healthy patients were incorrectly predicted to have heart disease (False Positives)  
+- **10** healthy patients were incorrectly predicted to have heart disease (False Positives)  
 - **9** patients with heart disease were missed by the model (False Negatives)
 
 
