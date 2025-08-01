@@ -132,8 +132,8 @@ docker-compose up --build
 This builds and starts both the FastAPI and Streamlit services inside containers.
 
 #### If Not Using Docker
-If you prefer to run the app without Docker, you’ll need to modify the API endpoint in the Streamlit app.
-Edit the file: ```src/app/streamlit_app.py``` 
+If you prefer to run the app without Docker, you’ll need to modify the API endpoint in the Streamlit app. Edit the file: ```src/app/streamlit_app.py``` 
+
 Change this line:
 ``` bash
 response = requests.post("http://api:8000/predict", json=input_dict)
@@ -145,6 +145,7 @@ response = requests.post("http://localhost:8000/predict", json=input_dict)
 ```
 
 Then, run the services manually:
+
 Start the FastAPI backend:
 ``` bash
 uvicorn src.app.api:app --reload
@@ -158,9 +159,9 @@ streamlit run src/app/streamlit_app.py
 #### 4. Access the Applications
 Once the services are running, open your browser to:
 
-Streamlit Dashboard: http://localhost:8501
+- **Streamlit Dashboard**: http://localhost:8501
 
-FastAPI Docs (Swagger UI): http://localhost:8000/docs
+- **FastAPI Docs (Swagger UI)**: http://localhost:8000/docs
 
 
 ---
