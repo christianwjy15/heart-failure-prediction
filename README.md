@@ -125,13 +125,14 @@ mlflow ui
 Open http://localhost:5000 in your browser to explore experiment runs, parameters, metrics, and artifacts.
 
 #### 3. Run the API and Streamlit App
-##### If Using Docker (Recommended)
+##### *If Using Docker (Recommended)*
 ``` bash
 docker-compose up --build
 ```
 This builds and starts both the FastAPI and Streamlit services inside containers.
 
-#### If Not Using Docker
+
+##### *If Not Using Docker*
 If you prefer to run the app without Docker, you’ll need to modify the API endpoint in the Streamlit app. Edit the file: ```src/app/streamlit_app.py``` 
 
 Change this line:
@@ -165,38 +166,111 @@ Once the services are running, open your browser to:
 
 
 ---
+
 ## Data
-Describe the dataset(s) used in your project.
 
-Source: Where did the data come from? (e.g., Kaggle, UCI, internal database)
+This project uses the [Heart Failure Prediction](https://www.kaggle.com/datasets/fedesoriano/heart-failure-prediction) dataset from Kaggle. The dataset contains **918 patient records** and **11 features**, which are used to predict the likelihood of heart disease.
 
-Description: What does the data represent? What are the key features?
+### Features
 
-Preprocessing: Briefly mention any significant preprocessing steps applied.
+- **Age**: Age of the patient (in years)  
+- **Sex**: Biological sex (`M`: Male, `F`: Female)  
+- **ChestPainType**: Type of chest pain  
+  - `TA`: Typical Angina  
+  - `ATA`: Atypical Angina  
+  - `NAP`: Non-Anginal Pain  
+  - `ASY`: Asymptomatic  
+- **RestingBP**: Resting blood pressure (mm Hg)  
+- **Cholesterol**: Serum cholesterol (mg/dl)  
+- **FastingBS**: Fasting blood sugar (`1` if >120 mg/dl, else `0`)  
+- **RestingECG**: Resting electrocardiogram results  
+  - `Normal`: Normal  
+  - `ST`: ST-T wave abnormality  
+  - `LVH`: Left ventricular hypertrophy  
+- **MaxHR**: Maximum heart rate achieved (60–202)  
+- **ExerciseAngina**: Exercise-induced angina (`Y`: Yes, `N`: No)  
+- **Oldpeak**: ST depression induced by exercise  
+- **ST_Slope**: Slope of the peak exercise ST segment (`Up`, `Flat`, `Down`)  
 
-Access: If the data is not included in the repo (due to size or privacy), explain how users can obtain it.
+### Target
+
+- **HeartDisease**: Output class (`1`: Heart Disease, `0`: Normal)
+
+### Preprocessing
+
+The dataset is relatively clean (no missing or duplicate values). The following preprocessing steps were applied:
+
+- Removed or corrected invalid data points (e.g., impossible values)
+- Encoded categorical features using suitable techniques
+- Split the dataset into **train and test sets** using **stratified sampling** (80% train / 20% test)
+
+> Stratification ensures that the distribution of the target variable (`HeartDisease`) is preserved in both the training and testing datasets.
+
 
 ---
 ## Model
-Provide details about the machine learning model(s) used.
 
-Algorithm: What algorithm did you use (e.g., Logistic Regression, Random Forest, TensorFlow, PyTorch)?
+For model training, four different machine learning algorithms were evaluated:
 
-Architecture: If it's a deep learning model, describe its architecture.
+- **Random Forest**
+- **XGBoost**
+- **LightGBM**
+- **CatBoost**
 
-Training: Briefly explain the training process (e.g., epochs, batch size, optimizer).
+### Evaluation Strategy
 
-Evaluation: What metrics did you use to evaluate the model's performance? Show key results if possible.
+- **Cross-Validation**: Stratified K-Fold Cross Validation (`k=5`) was used to ensure balanced distribution of the target class across folds.
+- **Hyperparameter Tuning**: Optuna was used for automated hyperparameter optimization, with:
+  - `n_trials = 50`
+  - Objective metric: **AUC (Area Under the ROC Curve)**
+
+### Best Performing Model
+
+After tuning and evaluation, **CatBoost** achieved the highest AUC score and was selected as the final model for deployment.
+
+> AUC was chosen as the optimization metric due to its effectiveness in measuring the model’s ability to distinguish between the positive and negative classes.
+
 
 ---
+
 ## Results
-Summarize the performance of your model. This is where you can showcase graphs, tables, or key metrics.
 
-Accuracy, Precision, Recall, F1-score, RMSE, MAE, etc.
+After identifying **CatBoost** as the best model through cross-validation and hyperparameter tuning, it was retrained on the **full training set** using the best-found parameters. The model was then evaluated on the test set.
 
-Confusion matrices, ROC curves (if applicable, you can link to an image).
+### Test Set Performance
 
-Insights gained from the model.
+- **AUC**: `0.93` — Excellent ability to distinguish between heart disease and normal cases.
+- **Recall**: `0.90` — The model correctly identified 90% of actual heart disease cases.
+- **Precision**: `0.91` — When the model predicts heart disease, it is correct 91% of the time.
+- **F1-Score**: `0.91` — A balanced metric indicating strong performance across both recall and precision.
+
+
+### Confusion Matrix
+<img width="480" height="360" alt="image" src="https://github.com/user-attachments/assets/6f455997-8a60-4e3c-9ebc-73c6938449e9" />
+
+This means:
+- **73** patients without heart disease were correctly classified
+- **93** patients with heart disease were correctly classified  
+- **9** healthy patients were incorrectly predicted to have heart disease (False Positives)  
+- **9** patients with heart disease were missed by the model (False Negatives)
+
+
+
+### Insights
+
+- The **high AUC (0.93)** confirms that the model has strong discriminative power.
+- **High recall (0.90)** ensures that most heart disease cases are detected — crucial for real-world medical applications.
+- **Balanced precision and recall** indicate a low number of false alarms and misses.
+- The **confusion matrix shows low misclassification**, making the model dependable in distinguishing between positive and negative cases.
+
+> In health-related models, **recall is critical** to avoid missing true cases of heart disease. This model demonstrates a strong ability to achieve that.
+
+
+
+
+
+
+
 
 
 
